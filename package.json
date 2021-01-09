@@ -9,7 +9,8 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "format": "prettier --check .",
-    "s": "adb reverse tcp:8080 tcp:8080 && react-native start"
+    "a": "adb reverse tcp:8081 tcp:8081 && react-native run-android",
+    "s": "adb reverse tcp:8081 tcp:8081 && react-native start"
   },
   "dependencies": {
     "react": "16.13.1",
