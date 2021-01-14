@@ -13,8 +13,10 @@
     "s": "adb reverse tcp:8081 tcp:8081 && react-native start"
   },
   "dependencies": {
+    "@react-native-community/art": "^1.2.0",
     "react": "16.13.1",
-    "react-native": "0.63.3"
+    "react-native": "0.63.3",
+    "react-native-neomorph-shadows": "^1.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

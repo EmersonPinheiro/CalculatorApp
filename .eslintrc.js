@@ -41,6 +41,12 @@ module.exports = {
     '@typescript-eslint/ban-types': 'warn',
     'react/display-name': 'off',
     'react/prop-types': 'off',
+    'react/self-closing-comp': [
+      'error',
+      {
+        component: true,
+      },
+    ],
     // 'prettier/prettier': ['error', {bracketSpacing: false}],
   },
   settings: {
