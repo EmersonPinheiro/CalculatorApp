@@ -1,5 +1,6 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {Button, SafeAreaView, StyleSheet, Text, ScrollView, View} from 'react-native';
+import {Display} from '../components/atoms';
 import {NumPad} from '../components/molecules';
 import {MathOperator} from '../types/MathOperator';
 
@@ -130,7 +131,7 @@ const Calculator = () => {
       <SafeAreaView>
         <View style={{backgroundColor: '#DDDDDD', height: '100%', width: '100%'}}>
           {/**DISPLAY */}
-          <Text>{calcDisplay}</Text>
+          <Display calcDisplay={calcDisplay} currentNumberDigits={currentNumberDigits} />
 
           <NumPad
             onPressDigit={onChangeCurrentNumber}

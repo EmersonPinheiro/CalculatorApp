@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {Text, Pressable, View} from 'react-native';
 import {Neomorph} from 'react-native-neomorph-shadows';
 import {MathOperator} from '../../../types/MathOperator';
@@ -10,6 +10,8 @@ interface NumPadPressabelProps {
   digit: string;
   size?: number;
   disableDigitFoward?: boolean;
+  expandHorizontally?: boolean;
+  expandVertically?: boolean;
 }
 
 const NumPadPressable: FC<NumPadPressabelProps> = ({
@@ -17,30 +19,41 @@ const NumPadPressable: FC<NumPadPressabelProps> = ({
   digit,
   size = SIZE,
   disableDigitFoward = false,
+  expandVertically,
+  expandHorizontally,
 }) => {
-  const onPressCallback = useCallback(() => {
+  const [pressing, setPressing] = useState<boolean>(false);
+
+  const onPressInCallback = useCallback(() => {
+    setPressing(true);
+  }, []);
+
+  const onPressOutCallback = useCallback(() => {
+    setPressing(false);
     onPress(!disableDigitFoward ? digit : undefined);
   }, [digit, disableDigitFoward, onPress]);
 
   return (
     <View style={{margin: 8}}>
       <Neomorph
+        inner={pressing}
         style={{
           shadowRadius: 3,
           borderRadius: size / 2,
           backgroundColor: '#DDDDDD',
-          width: size,
-          height: size,
+          height: !expandVertically ? size : size * 2 + 16,
+          width: !expandHorizontally ? size : size * 2 + 16,
         }}>
         <Pressable
-          onPress={onPressCallback}
-          android_ripple={{
-            borderless: false,
-            radius: size / 2,
-          }}
+          onPressIn={onPressInCallback}
+          onPressOut={onPressOutCallback}
+          // android_ripple={{
+          //   borderless: false,
+          //   radius: size / 2,
+          // }}
           style={{
-            height: size,
-            width: size,
+            height: !expandVertically ? size : size * 2 + 16,
+            width: !expandHorizontally ? size : size * 2 + 16,
             justifyContent: 'center',
             alignItems: 'center',
           }}>

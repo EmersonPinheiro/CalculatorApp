@@ -1,3 +1,4 @@
 import NumPadPressable from './numPadPressable';
+import Display from './display';
 
-export {NumPadPressable};
+export {NumPadPressable, Display};
