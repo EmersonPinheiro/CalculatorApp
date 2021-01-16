@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useState} from 'react';
-import {Text, Pressable, View} from 'react-native';
+import {Text, Pressable, View, StyleSheet} from 'react-native';
 import {Neomorph} from 'react-native-neomorph-shadows';
 import {MathOperator} from '../../../types/MathOperator';
 
@@ -12,6 +12,8 @@ interface NumPadPressabelProps {
   disableDigitFoward?: boolean;
   expandHorizontally?: boolean;
   expandVertically?: boolean;
+  darkShadowColor?: string;
+  lightShadowColor?: string;
 }
 
 const NumPadPressable: FC<NumPadPressabelProps> = ({
@@ -33,11 +35,14 @@ const NumPadPressable: FC<NumPadPressabelProps> = ({
     onPress(!disableDigitFoward ? digit : undefined);
   }, [digit, disableDigitFoward, onPress]);
 
+  const {text} = styles;
+
   return (
     <View style={{margin: 8}}>
       <Neomorph
         inner={pressing}
         style={{
+          shadowOpacity: 0.3,
           shadowRadius: 3,
           borderRadius: size / 2,
           backgroundColor: '#DDDDDD',
@@ -57,44 +62,19 @@ const NumPadPressable: FC<NumPadPressabelProps> = ({
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text>{digit}</Text>
+          <Text style={text}>{digit}</Text>
         </Pressable>
       </Neomorph>
-
-      {/* <Neomorph
-        style={{
-          shadowRadius: 10,
-          borderRadius: 200 / 2,
-          backgroundColor: '#DDDDDD',
-          width: 200,
-          height: 200,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Neomorph
-          inner
-          style={{
-            shadowRadius: 10,
-            borderRadius: 120 / 2,
-            backgroundColor: '#20bf55',
-            width: 120,
-            height: 120,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Neomorph
-            style={{
-              shadowRadius: 10,
-              borderRadius: 40 / 2,
-              backgroundColor: '#c6d2ed',
-              width: 40,
-              height: 40,
-            }}
-          />
-        </Neomorph>
-      </Neomorph> */}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'RobotoMono-ExtraLight',
+    color: '#575760',
+    fontSize: 24,
+  },
+});
 
 export default NumPadPressable;
