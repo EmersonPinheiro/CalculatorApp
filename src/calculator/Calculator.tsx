@@ -45,17 +45,15 @@ const Calculator = () => {
         }
       }
 
-      console.log({result});
-
       setCurrentNumberDigits('');
 
-      if (result !== undefined && result.toString().length <= DIGIT_LIMIT) {
+      if (result !== undefined && Math.abs(result).toString().length <= DIGIT_LIMIT) {
         setStoredNumber(result);
         setCurrentOperator(concatOperator);
 
         const display = concatOperator ? `${result}${concatOperator}` : `${result}`;
         setCalcDisplay(display);
-      } else if (result !== undefined && result.toString().length > DIGIT_LIMIT) {
+      } else if (result !== undefined && Math.abs(result).toString().length > DIGIT_LIMIT) {
         setInvalid(true);
         setStoredNumber(undefined);
         setCurrentOperator(undefined);
@@ -84,13 +82,19 @@ const Calculator = () => {
     setCalcDisplay('0');
   }, []);
 
+  const toggleCurrentNumberSign = useCallback(() => {
+    const aux = `${+currentNumberDigits * -1}`;
+    setCurrentNumberDigits(aux);
+    setCalcDisplay(aux);
+  }, [currentNumberDigits]);
+
   const onChangeCurrentNumber = useCallback(
     (digit: string) => {
       if (invalid) {
         setInvalid(false);
       }
 
-      if (currentNumberDigits.length < DIGIT_LIMIT) {
+      if (Math.abs(+currentNumberDigits).toString().length < DIGIT_LIMIT) {
         setCurrentNumberDigits(currentNumberDigits + digit);
 
         const display = currentOperator
@@ -133,6 +137,7 @@ const Calculator = () => {
             calculate={calculate}
             clear={clear}
             clearAll={clearAll}
+            toggleCurrentNumberSign={toggleCurrentNumberSign}
           />
         </View>
       </SafeAreaView>

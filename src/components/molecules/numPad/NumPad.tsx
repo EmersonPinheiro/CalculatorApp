@@ -9,18 +9,27 @@ interface NumPadProps {
   clear: () => void;
   clearAll: () => void;
   calculate: () => void;
+  toggleCurrentNumberSign: () => void;
 }
 
-const NumPad: FC<NumPadProps> = ({onPressDigit, calculate, clear, clearAll, onPressOperator}) => {
+const NumPad: FC<NumPadProps> = ({
+  onPressDigit,
+  calculate,
+  clear,
+  clearAll,
+  onPressOperator,
+  toggleCurrentNumberSign,
+}) => {
   const {container, row, column} = styles;
 
   return (
     <View style={container}>
       <View style={row}>
         <View style={column}>
-          <View style={[row, {justifyContent: 'flex-end'}]}>
+          <View style={row}>
             <NumPadPressable onPress={clearAll} digit="AC" />
             <NumPadPressable onPress={clear} digit="C" />
+            <NumPadPressable onPress={toggleCurrentNumberSign} digit="-/+" />
           </View>
           <View style={row}>
             <NumPadPressable onPress={onPressDigit} digit="1" />
@@ -39,8 +48,7 @@ const NumPad: FC<NumPadProps> = ({onPressDigit, calculate, clear, clearAll, onPr
           </View>
           <View style={row}>
             <NumPadPressable onPress={onPressDigit} digit="0" expandHorizontally />
-            {/* <NumPadPressable onPress={() => console.log('.')} digit="." /> */}
-            {/* <NumPadPressable onPress={onPressDigit} digit="-/+" /> */}
+            <NumPadPressable onPress={() => console.log('.')} digit="." />
           </View>
         </View>
         <View style={column}>
