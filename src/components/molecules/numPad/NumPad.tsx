@@ -48,7 +48,13 @@ const NumPad: FC<NumPadProps> = ({onPressDigit, calculate, clear, clearAll, onPr
           <NumPadPressable onPress={onPressOperator} digit="*" />
           <NumPadPressable onPress={onPressOperator} digit="-" />
           <NumPadPressable onPress={onPressOperator} digit="+" />
-          <NumPadPressable onPress={calculate} digit="=" disableDigitFoward />
+          <NumPadPressable
+            onPress={calculate}
+            digit="="
+            disableDigitForward
+            backgroundColor="#43555D"
+            fontColor="#DDDDDD"
+          />
         </View>
       </View>
     </View>
@@ -58,6 +64,7 @@ const NumPad: FC<NumPadProps> = ({onPressDigit, calculate, clear, clearAll, onPr
 const styles = StyleSheet.create({
   container: {
     flex: 3,
+    justifyContent: 'center',
   },
   row: {
     flexDirection: 'row',

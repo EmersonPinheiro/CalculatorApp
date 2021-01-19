@@ -1,30 +1,18 @@
 import React, {FC} from 'react';
-import {Text, View, Dimensions, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 import {Neomorph, NeomorphFlex} from 'react-native-neomorph-shadows';
 
 interface DisplayProps {
   calcDisplay: string;
-  currentNumberDigits: string;
 }
 
-const Display: FC<DisplayProps> = ({calcDisplay, currentNumberDigits}) => {
+const Display: FC<DisplayProps> = ({calcDisplay}) => {
   const {container, outerDisplay, innerDisplay, calcDisplayText} = styles;
 
   return (
     <View style={container}>
       <NeomorphFlex style={outerDisplay}>
         <Neomorph inner style={innerDisplay}>
-          {/* <Text
-            style={{
-              flex: 1,
-              textAlign: 'right',
-              textAlignVertical: 'center',
-              fontSize: 16,
-              paddingHorizontal: 16,
-            }}>
-            {calcDisplay}
-          </Text> */}
-
           <Text style={calcDisplayText}>{calcDisplay}</Text>
         </Neomorph>
       </NeomorphFlex>
@@ -34,7 +22,7 @@ const Display: FC<DisplayProps> = ({calcDisplay, currentNumberDigits}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0.7,
     margin: 16,
   },
   outerDisplay: {
@@ -47,7 +35,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   innerDisplay: {
-    height: 110,
+    height: 80,
     width: 300,
     shadowRadius: 3,
     backgroundColor: '#B1C6A6',
@@ -58,10 +46,9 @@ const styles = StyleSheet.create({
     flex: 3,
     textAlign: 'right',
     textAlignVertical: 'center',
-    fontSize: 32,
+    fontSize: 24,
     paddingHorizontal: 16,
-    fontFamily: 'RobotoMono-Thin',
-    // fontWeight: '600',
+    fontFamily: 'RobotoMono-ExtraLight',
   },
 });
 

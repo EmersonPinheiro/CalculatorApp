@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {Button, SafeAreaView, StyleSheet, Text, ScrollView, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {Display} from '../components/atoms';
 import {NumPad} from '../components/molecules';
 import {MathOperator} from '../types/MathOperator';
@@ -13,8 +13,7 @@ const Calculator = () => {
   const [storedNumber, setStoredNumber] = useState<number>();
   const [invalid, setInvalid] = useState<boolean>(false);
 
-  //TODO: Numpad input
-  //TODO: Display
+  const {container} = styles;
 
   useEffect(() => {
     if (invalid) {
@@ -27,25 +26,23 @@ const Calculator = () => {
       const currentNumber = +currentNumberDigits;
       let result;
 
-      if (!storedNumber) {
-        return;
-      }
-
-      switch (currentOperator) {
-        case '+':
-          result = storedNumber + currentNumber;
-          break;
-        case '-':
-          result = storedNumber - currentNumber;
-          break;
-        case '*':
-          result = storedNumber * currentNumber;
-          break;
-        case '/':
-          result = storedNumber / currentNumber;
-          break;
-        default:
-          break;
+      if (storedNumber !== undefined) {
+        switch (currentOperator) {
+          case '+':
+            result = storedNumber + currentNumber;
+            break;
+          case '-':
+            result = storedNumber - currentNumber;
+            break;
+          case '*':
+            result = storedNumber * currentNumber;
+            break;
+          case '/':
+            result = storedNumber / currentNumber;
+            break;
+          default:
+            break;
+        }
       }
 
       console.log({result});
@@ -113,7 +110,6 @@ const Calculator = () => {
       if (currentOperator && currentNumberDigitsLength) {
         calculate(operator);
       } else if (!currentNumberDigitsLength && storedNumber) {
-        console.log('aqui');
         setCurrentOperator(operator);
         setCalcDisplay(storedNumber.toString() + operator);
       } else {
@@ -129,10 +125,8 @@ const Calculator = () => {
   return (
     <>
       <SafeAreaView>
-        <View style={{backgroundColor: '#DDDDDD', height: '100%', width: '100%'}}>
-          {/**DISPLAY */}
-          <Display calcDisplay={calcDisplay} currentNumberDigits={currentNumberDigits} />
-
+        <View style={container}>
+          <Display calcDisplay={calcDisplay} />
           <NumPad
             onPressDigit={onChangeCurrentNumber}
             onPressOperator={onChangeCurrentOperator}
@@ -140,33 +134,18 @@ const Calculator = () => {
             clear={clear}
             clearAll={clearAll}
           />
-
-          {/**NUMPAD */}
-          {/* <Button onPress={() => onChangeCurrentNumber('1')} title="1" />
-          <Button onPress={() => onChangeCurrentNumber('2')} title="2" />
-          <Button onPress={() => onChangeCurrentNumber('3')} title="3" />
-          <Button onPress={() => onChangeCurrentNumber('4')} title="4" />
-          <Button onPress={() => onChangeCurrentNumber('5')} title="5" />
-          <Button onPress={() => onChangeCurrentNumber('6')} title="6" />
-          <Button onPress={() => onChangeCurrentNumber('7')} title="7" />
-          <Button onPress={() => onChangeCurrentNumber('8')} title="8" />
-          <Button onPress={() => onChangeCurrentNumber('9')} title="9" />
-          <Button onPress={() => onChangeCurrentNumber('0')} title="0" /> */}
-
-          {/**OPERATORS */}
-          {/* <Button onPress={() => onChangeCurrentOperator('+')} title="+" />
-          <Button onPress={() => onChangeCurrentOperator('-')} title="-" />
-          <Button onPress={() => onChangeCurrentOperator('/')} title="/" />
-          <Button onPress={() => onChangeCurrentOperator('*')} title="*" />
-          <Button onPress={() => calculate()} title="=" />
-          <Button onPress={() => clear()} title="C" />
-          <Button onPress={() => clearAll()} title="AC" /> */}
         </View>
       </SafeAreaView>
     </>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#DDDDDD',
+    height: '100%',
+    width: '100%',
+  },
+});
 
 export default Calculator;
