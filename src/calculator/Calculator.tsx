@@ -5,6 +5,7 @@ import {NumPad} from '../components/molecules';
 import {MathOperator} from '../types/MathOperator';
 
 const DIGIT_LIMIT = 8;
+const DECIMAL_PART_LIMIT = 3;
 
 const Calculator = () => {
   const [currentNumberDigits, setCurrentNumberDigits] = useState<string>('');
@@ -12,6 +13,7 @@ const Calculator = () => {
   const [calcDisplay, setCalcDisplay] = useState<string>('');
   const [storedNumber, setStoredNumber] = useState<number>();
   const [invalid, setInvalid] = useState<boolean>(false);
+  const [decimalDigits, setDecimalDigits] = useState<string>('');
 
   const {container} = styles;
 
@@ -23,7 +25,7 @@ const Calculator = () => {
 
   const calculate = useCallback(
     (concatOperator?: MathOperator) => {
-      const currentNumber = +currentNumberDigits;
+      const currentNumber = parseFloat(currentNumberDigits);
       let result;
 
       if (storedNumber !== undefined) {
@@ -47,16 +49,23 @@ const Calculator = () => {
 
       setCurrentNumberDigits('');
 
-      if (result !== undefined && Math.abs(result).toString().length <= DIGIT_LIMIT) {
-        setStoredNumber(result);
-        setCurrentOperator(concatOperator);
+      if (result !== undefined) {
+        const resultLength = Math.abs(+result.toFixed()).toString().length;
 
-        const display = concatOperator ? `${result}${concatOperator}` : `${result}`;
-        setCalcDisplay(display);
-      } else if (result !== undefined && Math.abs(result).toString().length > DIGIT_LIMIT) {
-        setInvalid(true);
-        setStoredNumber(undefined);
-        setCurrentOperator(undefined);
+        if (resultLength <= DIGIT_LIMIT) {
+          result = result.toString().split('.')[1].length > 3 ? +result.toFixed(3) : result;
+
+          setStoredNumber(result);
+          setCurrentOperator(concatOperator);
+
+          const display = concatOperator ? `${result}${concatOperator}` : `${result}`;
+
+          setCalcDisplay(display);
+        } else if (resultLength > DIGIT_LIMIT) {
+          setInvalid(true);
+          setStoredNumber(undefined);
+          setCurrentOperator(undefined);
+        }
       }
     },
     [currentNumberDigits, currentOperator, storedNumber],
@@ -65,6 +74,7 @@ const Calculator = () => {
   const clear = useCallback(() => {
     if (currentNumberDigits.length) {
       setCurrentNumberDigits('');
+      setDecimalDigits('');
 
       const display = `${storedNumber ?? ''}${currentOperator ?? ''}`;
       setCalcDisplay(display);
@@ -77,16 +87,22 @@ const Calculator = () => {
 
   const clearAll = useCallback(() => {
     setCurrentNumberDigits('');
+    setDecimalDigits('');
     setCurrentOperator(undefined);
     setStoredNumber(undefined);
     setCalcDisplay('0');
   }, []);
 
   const toggleCurrentNumberSign = useCallback(() => {
-    const aux = `${+currentNumberDigits * -1}`;
+    let aux = '0';
+    if (currentNumberDigits) {
+      aux = `${+currentNumberDigits * -1}`;
+    } else if (storedNumber) {
+      aux = `${storedNumber * -1}`;
+    }
     setCurrentNumberDigits(aux);
     setCalcDisplay(aux);
-  }, [currentNumberDigits]);
+  }, [currentNumberDigits, storedNumber]);
 
   const onChangeCurrentNumber = useCallback(
     (digit: string) => {
@@ -94,7 +110,15 @@ const Calculator = () => {
         setInvalid(false);
       }
 
-      if (Math.abs(+currentNumberDigits).toString().length < DIGIT_LIMIT) {
+      const digitsLength = Math.abs(+currentNumberDigits).toString().length;
+
+      if (
+        (digit === '.' && !decimalDigits) ||
+        (digit !== '.' &&
+          ((digitsLength < DIGIT_LIMIT && !decimalDigits) ||
+            (digitsLength < DIGIT_LIMIT + DECIMAL_PART_LIMIT + 1 &&
+              decimalDigits.length < DECIMAL_PART_LIMIT + 1)))
+      ) {
         setCurrentNumberDigits(currentNumberDigits + digit);
 
         const display = currentOperator
@@ -102,19 +126,30 @@ const Calculator = () => {
           : currentNumberDigits + digit;
         setCalcDisplay(display);
       }
+
+      if (
+        ((!decimalDigits && digit === '.') || (decimalDigits && digit !== '.')) &&
+        decimalDigits.length < DECIMAL_PART_LIMIT + 1
+      ) {
+        setDecimalDigits(decimalDigits + digit);
+      }
     },
-    [calcDisplay, currentNumberDigits, currentOperator, invalid],
+    [calcDisplay, currentNumberDigits, currentOperator, decimalDigits, invalid],
   );
 
   const onChangeCurrentOperator = useCallback(
     (operator: MathOperator) => {
-      console.log({operator});
       const currentNumberDigitsLength = currentNumberDigits.length;
+
+      if (decimalDigits) {
+        setDecimalDigits('');
+      }
 
       if (currentOperator && currentNumberDigitsLength) {
         calculate(operator);
       } else if (!currentNumberDigitsLength && storedNumber) {
         setCurrentOperator(operator);
+
         setCalcDisplay(storedNumber.toString() + operator);
       } else {
         setStoredNumber(+currentNumberDigits);
@@ -123,7 +158,7 @@ const Calculator = () => {
         setCurrentNumberDigits('');
       }
     },
-    [calculate, currentNumberDigits, currentOperator, storedNumber],
+    [calculate, currentNumberDigits, currentOperator, decimalDigits, storedNumber],
   );
 
   return (

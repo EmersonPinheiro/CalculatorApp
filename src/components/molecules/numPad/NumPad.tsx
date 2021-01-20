@@ -48,7 +48,7 @@ const NumPad: FC<NumPadProps> = ({
           </View>
           <View style={row}>
             <NumPadPressable onPress={onPressDigit} digit="0" expandHorizontally />
-            <NumPadPressable onPress={() => console.log('.')} digit="." />
+            <NumPadPressable onPress={onPressDigit} digit="." />
           </View>
         </View>
         <View style={column}>
@@ -56,13 +56,7 @@ const NumPad: FC<NumPadProps> = ({
           <NumPadPressable onPress={onPressOperator} digit="*" />
           <NumPadPressable onPress={onPressOperator} digit="-" />
           <NumPadPressable onPress={onPressOperator} digit="+" />
-          <NumPadPressable
-            onPress={calculate}
-            digit="="
-            disableDigitForward
-            backgroundColor="#43555D"
-            fontColor="#DDDDDD"
-          />
+          <NumPadPressable onPress={calculate} digit="=" disableDigitForward />
         </View>
       </View>
     </View>
