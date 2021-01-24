@@ -117,6 +117,7 @@ const Calculator = () => {
         (digit !== '.' &&
           ((digitsLength < DIGIT_LIMIT && !decimalDigits) ||
             (digitsLength < DIGIT_LIMIT + DECIMAL_PART_LIMIT + 1 &&
+              decimalDigits &&
               decimalDigits.length < DECIMAL_PART_LIMIT + 1)))
       ) {
         setCurrentNumberDigits(currentNumberDigits + digit);
